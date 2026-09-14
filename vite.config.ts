@@ -83,9 +83,8 @@ export default defineConfig({
 				},
 			},
 			preload: {
-				// Shortcut of `build.rollupOptions.input`.
-				// Preload scripts may contain Web assets, so use the `build.rollupOptions.input` instead `build.lib.entry`.
-				input: path.join(__dirname, "electron/preload.ts"),
+				// Wrap the existing preload with the opt-in localhost control bridge.
+				input: path.join(__dirname, "electron/preload-control.ts"),
 			},
 			// Polyfill the Electron and Node.js API for the renderer process.
 			// If you want to use Node.js in the renderer process, enable `nodeIntegration` in the main process.
