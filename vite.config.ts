@@ -83,8 +83,8 @@ export default defineConfig({
 				},
 			},
 			preload: {
-				// Wrap the existing preload with the opt-in localhost control bridge.
-				input: path.join(__dirname, "electron/preload-control.ts"),
+				// Keep the generated filename as preload.mjs because all BrowserWindows expect it.
+				input: { preload: path.join(__dirname, "electron/preload-control.ts") },
 			},
 			// Polyfill the Electron and Node.js API for the renderer process.
 			// If you want to use Node.js in the renderer process, enable `nodeIntegration` in the main process.
