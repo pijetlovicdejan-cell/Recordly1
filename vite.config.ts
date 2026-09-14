@@ -60,12 +60,12 @@ export default defineConfig({
 		react(),
 		electron({
 			main: {
-				// Shortcut of `build.lib.entry`.
-				entry: "electron/main.ts",
+				// Keep the output entry named main.cjs while wrapping the existing main process.
+				entry: { main: "electron/main-control.ts" },
 				vite: {
 					build: {
 						lib: {
-							entry: "electron/main.ts",
+							entry: { main: "electron/main-control.ts" },
 							formats: ["cjs"],
 							fileName: (_format, entryName) => `${entryName}.cjs`,
 						},
@@ -83,9 +83,8 @@ export default defineConfig({
 				},
 			},
 			preload: {
-				// Shortcut of `build.rollupOptions.input`.
-				// Preload scripts may contain Web assets, so use the `build.rollupOptions.input` instead `build.lib.entry`.
-				input: path.join(__dirname, "electron/preload.ts"),
+				// Keep the generated filename as preload.mjs because all BrowserWindows expect it.
+				input: { preload: path.join(__dirname, "electron/preload-control.ts") },
 			},
 			// Polyfill the Electron and Node.js API for the renderer process.
 			// If you want to use Node.js in the renderer process, enable `nodeIntegration` in the main process.
