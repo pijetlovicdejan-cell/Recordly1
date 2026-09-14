@@ -202,6 +202,43 @@ function LaunchWindowContent() {
 		};
 	}, [syncSelectedSource]);
 
+	useEffect(() => {
+		window.recordlyControl?.setStatus({
+			recording,
+			paused,
+			finalizing,
+			countdownActive,
+			sourceSelected: hasSelectedSource || platform === "linux",
+			sourceName: hasSelectedSource ? selectedSource : platform === "linux" ? "Linux Portal" : null,
+		});
+	}, [
+		recording,
+		paused,
+		finalizing,
+		countdownActive,
+		hasSelectedSource,
+		platform,
+		selectedSource,
+	]);
+
+	useEffect(() => {
+		const control = window.recordlyControl;
+		if (!control) return;
+
+		return control.subscribe((command) => {
+			if (command === "record-start") {
+				if (recording || finalizing || countdownActive) return;
+				if (!hasSelectedSource && platform !== "linux") return;
+				void toggleRecording();
+				return;
+			}
+
+			if (command === "record-stop" && recording) {
+				void toggleRecording();
+			}
+		});
+	}, [recording, finalizing, countdownActive, hasSelectedSource, platform, toggleRecording]);
+
 	const hudStateTransition = {
 		duration: 0.24,
 		ease: [0.22, 1, 0.36, 1] as const,
