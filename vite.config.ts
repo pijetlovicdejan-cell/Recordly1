@@ -60,12 +60,12 @@ export default defineConfig({
 		react(),
 		electron({
 			main: {
-				// Shortcut of `build.lib.entry`.
-				entry: "electron/main.ts",
+				// Keep the output entry named main.cjs while wrapping the existing main process.
+				entry: { main: "electron/main-control.ts" },
 				vite: {
 					build: {
 						lib: {
-							entry: "electron/main.ts",
+							entry: { main: "electron/main-control.ts" },
 							formats: ["cjs"],
 							fileName: (_format, entryName) => `${entryName}.cjs`,
 						},
